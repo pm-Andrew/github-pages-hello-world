@@ -1,0 +1,335 @@
+/* ═══════════════════════════════════════════════
+   RADIAL FAB — radial.css
+   Supports:
+   1. Modern CSS (@supports appearance: base-select) — native <select> radial
+   2. JS fallback — .fab-js-open class driven by radial.js
+═══════════════════════════════════════════════ */
+
+/* ── CONTAINER ── */
+.fab-container {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 1000;
+}
+
+/* ── TRIGGER BUTTON ── */
+.fab-trigger {
+    margin: 0 27px 38px 5px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(167, 139, 250, 0.4);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.3s,
+        background 0.3s;
+}
+
+.fab-trigger:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.5), 0 0 0 8px rgba(167, 139, 250, 0.12);
+}
+
+.fab-icon {
+    transition: opacity 0.2s, transform 0.2s;
+    position: absolute;
+}
+
+.fab-icon-close {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+.fab-icon-open {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+.fab-open .fab-trigger {
+    background: var(--accent-2);
+    transform: rotate(45deg);
+}
+
+.fab-open .fab-icon-open {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+.fab-open .fab-icon-close {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+/* ── PETALS (shared base) ── */
+.fab-petal {
+    position: absolute;
+    bottom: 35px;
+    right: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.petal-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-2);
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.25s,
+        background 0.2s,
+        box-shadow 0.2s;
+    opacity: 0;
+    transform: scale(0.5);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 5;
+}
+
+.petal-btn:hover {
+    background: var(--bg-3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    /* transform: scale(1.12) !important; */
+}
+
+.petal-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.petal-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s 0.1s, transform 0.2s 0.1s;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* Petal positions — JS sets these via CSS custom props */
+.fab-petal {
+    --tx: 0px;
+    --ty: 0px;
+}
+
+/* ── OPEN STATE (JS-driven) ── */
+.fab-open .petal-btn {
+    opacity: 1;
+    transform: translate(var(--tx), var(--ty)) scale(1);
+}
+
+.fab-open .petal-label {
+    opacity: 1;
+    transform: translate(var(--tx), calc(var(--ty) + 0px)) translateY(0);
+}
+
+/* Stagger delays */
+.fab-open #petal-navigate .petal-btn {
+    transition-delay: 0.00s;
+}
+
+.fab-open #petal-tags .petal-btn {
+    transition-delay: 0.05s;
+}
+
+.fab-open #petal-theme .petal-btn {
+    transition-delay: 0.10s;
+}
+
+.fab-open #petal-navigate .petal-label {
+    transition-delay: 0.08s;
+}
+
+.fab-open #petal-tags .petal-label {
+    transition-delay: 0.13s;
+}
+
+.fab-open #petal-theme .petal-label {
+    transition-delay: 0.18s;
+}
+
+/* ── PETAL PANELS (dropdown panels per petal) ── */
+.petal-panel {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    right: 0;
+    width: 220px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: scale(0.92) translateY(8px);
+    transform-origin: bottom right;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 20;
+}
+
+.petal-panel.panel-open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: all;
+}
+
+/* Position panels relative to their petal's translated position */
+#petal-navigate .petal-panel {
+    right: auto;
+    left: auto;
+    transform-origin: bottom center;
+}
+
+#petal-tags .petal-panel {
+    right: auto;
+    left: auto;
+    transform-origin: bottom center;
+}
+
+#petal-theme .petal-panel {
+    right: 0;
+    transform-origin: bottom right;
+}
+
+.petal-panel-title {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+/* Nav note list inside panel */
+.panel-nav-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 7px 10px;
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.panel-nav-item:hover {
+    background: var(--bg-3);
+    color: var(--accent);
+}
+
+.panel-nav-item.active {
+    color: var(--accent);
+    background: rgba(167, 139, 250, 0.08);
+}
+
+/* Tag pills inside panel */
+.panel-tag-pill {
+    display: inline-block;
+    margin: 3px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-3);
+    color: var(--text-dim);
+    font-size: 11.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.panel-tag-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.panel-tag-pill.active {
+    background: rgba(167, 139, 250, 0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Theme options */
+.theme-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.theme-opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 12px;
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.theme-opt:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(167, 139, 250, 0.08);
+}
+
+.theme-opt.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(167, 139, 250, 0.12);
+}
+
+/* ── CLICK-OUTSIDE BACKDROP ── */
+.fab-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+}
+
+.fab-backdrop.active {
+    display: block;
+}
+
+/* ── PULSE HINT (first visit) ── */
+@keyframes fab-pulse {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(167, 139, 250, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 0 14px rgba(167, 139, 250, 0);
+    }
+}
+
+.fab-trigger.pulse {
+    animation: fab-pulse 2s ease-in-out 3;
+}

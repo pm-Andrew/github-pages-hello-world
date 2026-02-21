@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Garden</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/radial.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="site-name">🌱 The Garden</div>
+            <div class="site-tagline">A digital commonplace book</div>
+        </div>
+        <div class="search-box">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+            </svg>
+            Search notes...
+        </div>
+        <nav class="nav-section">
+            <div class="nav-label">Notes</div>
+            <div id="sidebar-notes"></div>
+        </nav>
+        <nav class="nav-section" style="margin-top:auto; border-top: 1px solid var(--border);">
+            <div class="nav-label">Tags</div>
+            <div id="sidebar-tags"></div>
+        </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="content-area">
+        <main class="note-pane">
+            <div class="note-header">
+                <div class="note-tags" id="note-tags"></div>
+                <h1 class="note-title" id="note-title">Loading…</h1>
+                <div class="note-meta" id="note-meta"></div>
+            </div>
+            <hr class="divider">
+            <div class="note-body" id="note-body"></div>
+            <div class="backlinks-section" id="backlinks-section" style="display:none">
+                <div class="backlinks-title" id="backlinks-title"></div>
+                <div id="backlinks-list"></div>
+            </div>
+        </main>
+
+        <!-- RIGHT PANEL -->
+        <aside class="right-panel">
+            <div class="panel-section">
+                <div class="panel-label">Local Graph</div>
+                <canvas id="graph-canvas"></canvas>
+            </div>
+            <div class="panel-section">
+                <div class="panel-label">On this page</div>
+                <div id="outline-list"></div>
+            </div>
+            <div class="panel-section">
+                <div class="panel-label">Linked Notes</div>
+                <div id="linked-notes"></div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ── RADIAL FAB ── -->
+    <div class="fab-container" id="fab-container">
+
+        <!-- NATIVE CSS version (Chrome with base-select support) -->
+        <div class="fab-native" id="fab-native">
+
+            <!-- Main trigger button -->
+            <button class="fab-trigger" id="fab-trigger" aria-label="Open menu">
+                <span class="fab-icon fab-icon-open">✦</span>
+                <span class="fab-icon fab-icon-close">✕</span>
+            </button>
+
+            <!-- Petal: Navigate -->
+            <div class="fab-petal" id="petal-navigate" data-angle="140" data-label="Navigate">
+                <button class="petal-btn" data-petal="navigate" aria-label="Navigate to note">🗺️</button>
+                <div class="petal-label">Navigate</div>
+                <div class="petal-panel" id="panel-navigate">
+                    <div class="petal-panel-title">Jump to note</div>
+                    <div id="nav-note-list"></div>
+                </div>
+            </div>
+
+            <!-- Petal: Tags -->
+            <div class="fab-petal" id="petal-tags" data-angle="210" data-label="Tags">
+                <button class="petal-btn" data-petal="tags" aria-label="Filter by tag">🏷️</button>
+                <div class="petal-label">Tags</div>
+                <div class="petal-panel" id="panel-tags">
+                    <div class="petal-panel-title">Filter by tag</div>
+                    <div id="nav-tag-list"></div>
+                </div>
+            </div>
+
+            <!-- Petal: Theme -->
+            <div class="fab-petal" id="petal-theme" data-angle="280" data-label="Theme">
+                <button class="petal-btn" data-petal="theme" aria-label="Switch theme">🎨</button>
+                <div class="petal-label">Theme</div>
+                <div class="petal-panel" id="panel-theme">
+                    <div class="petal-panel-title">Choose theme</div>
+                    <div class="theme-options">
+                        <button class="theme-opt" data-theme="dark">🌑 Dark</button>
+                        <button class="theme-opt" data-theme="light">☀️ Light</button>
+                        <button class="theme-opt" data-theme="sepia">📜 Sepia</button>
+                        <button class="theme-opt" data-theme="forest">🌲 Forest</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end fab-container -->
+
+    <script src="js/app.js"></script>
+    <script src="js/radial.js"></script>
+</body>
+
+</html>
